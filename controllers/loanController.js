@@ -2,7 +2,7 @@ const db = require('../config/db');
 const { validationResult } = require('express-validator');
 
 // Apply for a Loan
-exports.applyLoan = (req, res) => {
+exports.applyLoan = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -20,7 +20,7 @@ exports.applyLoan = (req, res) => {
 };
 
 // Get Loan Details by ID
-exports.getLoanById = (req, res) => {
+exports.getLoanById = async (req, res) => {
     const { id } = req.params;
     db.query('SELECT * FROM loans WHERE loan_id = ?', [id], (err, results) => {
         if (err) return res.status(500).json({ error: 'Database error', details: err });
@@ -30,7 +30,7 @@ exports.getLoanById = (req, res) => {
 };
 
 // Update Loan Status
-exports.updateLoanStatus = (req, res) => {
+exports.updateLoanStatus = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
