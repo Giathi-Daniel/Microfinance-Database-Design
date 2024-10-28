@@ -1,17 +1,20 @@
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/userRoutes');
+const loanRoutes = require('./routes/loanRoutes')
+const paymentRoutes = require('./routes/paymentRoutes')
 
 const app = express();
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')))
 
-app.use('/api', userRoutes);
+// Routes
+app.use('/api/users', userRoutes)
+app.use('/api/loans', loanRoutes)
+app.use('/api/payments', paymentRoutes)
 
-app.use('/', (req, res) => {
-    res.send("Welcome")
-})
-
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
