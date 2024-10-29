@@ -2,9 +2,15 @@
 const fetchData = async (url, method = 'GET', data = null) => {
     const options = { method, headers: { 'Content-Type': 'application/json' } };
     if (data) options.body = JSON.stringify(data);
+    
     const response = await fetch(url, options);
+    if (!response.ok) {
+        const errorDetails = await response.json();
+        throw new Error(`Error: ${response.status} ${errorDetails.message || ''}`);
+    }
     return response.json();
 };
+
 
 // User Management
 document.getElementById('addUserForm').addEventListener('submit', async (e) => {
@@ -73,6 +79,7 @@ const editUser = async (userId) => {
 
 // Delete User Function
 const deleteUser = async (userId) => {
+    console.log("Deleting user with ID:", userId);
     if (confirm("Are you sure you want to delete this user?")) {
         await fetchData(`/api/users/${userId}`, 'DELETE');
         loadUsers();
